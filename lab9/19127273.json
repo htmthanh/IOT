@@ -1,0 +1,217 @@
+[
+    {
+        "id": "8d4252390c054bee",
+        "type": "tab",
+        "label": "Flow 5",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "5f5b2bb194a8ff4a",
+        "type": "mqtt in",
+        "z": "8d4252390c054bee",
+        "name": "",
+        "topic": "19127273/Rain",
+        "qos": "2",
+        "datatype": "auto",
+        "broker": "79204ce0a011ea3e",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 300,
+        "y": 180,
+        "wires": [
+            [
+                "328fa26ee950d2b4"
+            ]
+        ]
+    },
+    {
+        "id": "328fa26ee950d2b4",
+        "type": "ui_gauge",
+        "z": "8d4252390c054bee",
+        "name": "",
+        "group": "ea9af9f0f957543d",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "gtype": "wave",
+        "title": "Amout of water",
+        "label": "mm",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "1500",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "className": "",
+        "x": 500,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "473a421c95c6d5e5",
+        "type": "mqtt in",
+        "z": "8d4252390c054bee",
+        "name": "",
+        "topic": "19127273/Rain",
+        "qos": "2",
+        "datatype": "auto",
+        "broker": "79204ce0a011ea3e",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 240,
+        "y": 320,
+        "wires": [
+            [
+                "0db2f799baf1565d"
+            ]
+        ]
+    },
+    {
+        "id": "0db2f799baf1565d",
+        "type": "function",
+        "z": "8d4252390c054bee",
+        "name": "",
+        "func": "var p = msg.payload;\nconst myArr = p.split(\" \");\nif(myArr[0]>=80){\n    msg.payload = parseInt(myArr[0]);\n    return msg;\n}\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 440,
+        "y": 320,
+        "wires": [
+            [
+                "43f9efee0ff3d114"
+            ]
+        ]
+    },
+    {
+        "id": "a530ae9db33f9c62",
+        "type": "http request",
+        "z": "8d4252390c054bee",
+        "name": "",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "https://maker.ifttt.com/trigger/pushnotification/with/key/jq52ioI6U97OgE5ZrleU4zQJzGx5IfyvfzxuFGcXhKb?&value1={{payload}}",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "authType": "",
+        "senderr": false,
+        "x": 910,
+        "y": 280,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "43f9efee0ff3d114",
+        "type": "switch",
+        "z": "8d4252390c054bee",
+        "name": "",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "lt",
+                "v": "1000",
+                "vt": "num"
+            },
+            {
+                "t": "gte",
+                "v": "1000",
+                "vt": "num"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 590,
+        "y": 320,
+        "wires": [
+            [
+                "a530ae9db33f9c62"
+            ],
+            [
+                "c58a4b03f01ac5b9"
+            ]
+        ]
+    },
+    {
+        "id": "c58a4b03f01ac5b9",
+        "type": "http request",
+        "z": "8d4252390c054bee",
+        "name": "",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "https://maker.ifttt.com/trigger/pushnotification2/with/key/jq52ioI6U97OgE5ZrleU4zQJzGx5IfyvfzxuFGcXhKb?&value1={{payload}}",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "authType": "",
+        "senderr": false,
+        "x": 910,
+        "y": 360,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "79204ce0a011ea3e",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "broker.mqtt-dashboard.com",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "sessionExpiry": ""
+    },
+    {
+        "id": "ea9af9f0f957543d",
+        "type": "ui_group",
+        "name": "Rain",
+        "tab": "afb9a8e92a912543",
+        "order": 6,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "afb9a8e92a912543",
+        "type": "ui_tab",
+        "name": "Rain",
+        "icon": "dashboard",
+        "order": 1,
+        "disabled": false,
+        "hidden": false
+    }
+]

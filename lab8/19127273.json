@@ -1,0 +1,344 @@
+[
+    {
+        "id": "7d55074cc0269e3c",
+        "type": "tab",
+        "label": "Flow 4",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "0ba3f57f8091d134",
+        "type": "ui_text",
+        "z": "7d55074cc0269e3c",
+        "group": "63ea07c20fef8fa3",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "ID",
+        "format": "19127273",
+        "layout": "row-spread",
+        "className": "",
+        "x": 130,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "d719a805c04be3a4",
+        "type": "ui_text",
+        "z": "7d55074cc0269e3c",
+        "group": "63ea07c20fef8fa3",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Name",
+        "format": "Huynh Thi My Thanh",
+        "layout": "row-spread",
+        "className": "",
+        "x": 130,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "eb76f2b2c0c30233",
+        "type": "ui_slider",
+        "z": "7d55074cc0269e3c",
+        "name": "",
+        "label": "TEMPERATURE",
+        "tooltip": "",
+        "group": "a7254560d94a084f",
+        "order": 5,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "outs": "end",
+        "topic": "number",
+        "topicType": "flow",
+        "min": 0,
+        "max": "100",
+        "step": 1,
+        "className": "",
+        "x": 130,
+        "y": 400,
+        "wires": [
+            [
+                "9b4793f6cc082796"
+            ]
+        ]
+    },
+    {
+        "id": "9b4793f6cc082796",
+        "type": "change",
+        "z": "7d55074cc0269e3c",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "number",
+                "pt": "flow",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 320,
+        "y": 400,
+        "wires": [
+            [
+                "dc4a26a06f5a4ee8"
+            ]
+        ]
+    },
+    {
+        "id": "10cb03cb2949c250",
+        "type": "change",
+        "z": "7d55074cc0269e3c",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "number",
+                "tot": "flow"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 680,
+        "y": 400,
+        "wires": [
+            [
+                "84b306235d3a8b65"
+            ]
+        ]
+    },
+    {
+        "id": "dc4a26a06f5a4ee8",
+        "type": "ui_button",
+        "z": "7d55074cc0269e3c",
+        "name": "",
+        "group": "a7254560d94a084f",
+        "order": 8,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "label": "INSERT",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "payload": "number",
+        "payloadType": "flow",
+        "topic": "pay",
+        "topicType": "msg",
+        "x": 480,
+        "y": 400,
+        "wires": [
+            [
+                "10cb03cb2949c250"
+            ]
+        ]
+    },
+    {
+        "id": "84b306235d3a8b65",
+        "type": "http request",
+        "z": "7d55074cc0269e3c",
+        "name": "",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "https://api.thingspeak.com/update?api_key=W86PBB4Z8F7QP0C2&field1={{payload}}",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "authType": "",
+        "senderr": false,
+        "x": 910,
+        "y": 400,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "99c5d207ee812824",
+        "type": "ui_button",
+        "z": "7d55074cc0269e3c",
+        "name": "",
+        "group": "304a329ddcb9389d",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "label": "REFRESH",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "payload": "",
+        "payloadType": "str",
+        "topic": "topic",
+        "topicType": "msg",
+        "x": 130,
+        "y": 220,
+        "wires": [
+            [
+                "7bfaec586f5e2cab"
+            ]
+        ]
+    },
+    {
+        "id": "7bfaec586f5e2cab",
+        "type": "http request",
+        "z": "7d55074cc0269e3c",
+        "name": "",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "https://api.thingspeak.com/channels/1594779/fields/1.json?api_key=1QYQSE6ATPDXP4XY&timezone=Asia/Bangkok&results=20",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "authType": "",
+        "senderr": false,
+        "x": 310,
+        "y": 220,
+        "wires": [
+            [
+                "214b78efdfb45547"
+            ]
+        ]
+    },
+    {
+        "id": "214b78efdfb45547",
+        "type": "json",
+        "z": "7d55074cc0269e3c",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 490,
+        "y": 220,
+        "wires": [
+            [
+                "9d6c1e7d056f9d39"
+            ]
+        ]
+    },
+    {
+        "id": "9d6c1e7d056f9d39",
+        "type": "function",
+        "z": "7d55074cc0269e3c",
+        "name": "",
+        "func": "msg.payload = msg.payload.feeds[19].field1;\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 700,
+        "y": 220,
+        "wires": [
+            [
+                "311fba3dbff36fa0"
+            ]
+        ]
+    },
+    {
+        "id": "311fba3dbff36fa0",
+        "type": "ui_chart",
+        "z": "7d55074cc0269e3c",
+        "name": "",
+        "group": "304a329ddcb9389d",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "label": "chart",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 930,
+        "y": 220,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "63ea07c20fef8fa3",
+        "type": "ui_group",
+        "name": "Information",
+        "tab": "f534eb47.6019c8",
+        "order": 1,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "a7254560d94a084f",
+        "type": "ui_group",
+        "name": "Data",
+        "tab": "f534eb47.6019c8",
+        "order": 2,
+        "disp": true,
+        "width": "9",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "304a329ddcb9389d",
+        "type": "ui_group",
+        "name": "Chart",
+        "tab": "f534eb47.6019c8",
+        "order": 3,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "f534eb47.6019c8",
+        "type": "ui_tab",
+        "name": "Visualization",
+        "icon": "dashboard",
+        "order": 4,
+        "disabled": false,
+        "hidden": false
+    }
+]

@@ -1,0 +1,1057 @@
+[
+    {
+        "id": "ae39918233d5276a",
+        "type": "tab",
+        "label": "Demo",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "ecbdd971729e8d78",
+        "type": "ui_form",
+        "z": "ae39918233d5276a",
+        "name": "Sign in",
+        "label": "",
+        "group": "8b6adec8161b8112",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "options": [
+            {
+                "label": "username",
+                "value": "username",
+                "type": "text",
+                "required": true,
+                "rows": null
+            },
+            {
+                "label": "password",
+                "value": "password",
+                "type": "password",
+                "required": true,
+                "rows": null
+            }
+        ],
+        "formValue": {
+            "username": "",
+            "password": ""
+        },
+        "payload": "",
+        "submit": "submit",
+        "cancel": "cancel",
+        "topic": "",
+        "topicType": "str",
+        "splitLayout": false,
+        "className": "",
+        "x": 90,
+        "y": 60,
+        "wires": [
+            [
+                "e2c74cdfd5f9f898"
+            ]
+        ]
+    },
+    {
+        "id": "e2c74cdfd5f9f898",
+        "type": "function",
+        "z": "ae39918233d5276a",
+        "name": "Check account exist",
+        "func": "var accounts =  flow.get(\"accounts\") || [ { username : \"htmthanh\", password : \"htmthanh\"},{ username : \"bcdanh\", password : \"bcdanh\"},{ username : \"tttlinh\", password : \"tttlinh\"}] ; \n\nvar username = msg.payload.username ;\nvar password = msg.payload.password ; \n\nvar nMsg = {}; nMsg.payload = 2;\n\naccounts.forEach(function ( account ){\n    if ( account.username == username ) {\n       nMsg.payload = 3;\n       if ( account.password == password ) {\n           nMsg.payload = 1;\n       } \n    }\n});\n\nreturn nMsg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 280,
+        "y": 60,
+        "wires": [
+            [
+                "1e70f3b53584d114"
+            ]
+        ]
+    },
+    {
+        "id": "1e70f3b53584d114",
+        "type": "switch",
+        "z": "ae39918233d5276a",
+        "name": "",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "1",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "2",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "3",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 3,
+        "x": 530,
+        "y": 60,
+        "wires": [
+            [
+                "34cb7e66f8ae85bb"
+            ],
+            [
+                "ac15a8756f16e8de"
+            ],
+            [
+                "59199d09a0ae0c14"
+            ]
+        ]
+    },
+    {
+        "id": "34cb7e66f8ae85bb",
+        "type": "function",
+        "z": "ae39918233d5276a",
+        "name": "Success",
+        "func": "\nmsg.payload = {  \n        \"group\": {\n        \"show\" : [\"Dashboard_Sensordata\", \"Dashboard_signout\",\n        \"Dashboard_TemperatureDisplay\", \"Dashboard_BrightnessDisplay\",\"Dashboard_HumidityDisplay\"],\n        \n        \"hide\" : [\"Dashboard_signin\"],\n},\n    \"tab\": \"Dashboard\"\n}\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 700,
+        "y": 40,
+        "wires": [
+            [
+                "6910b85648139caa"
+            ]
+        ]
+    },
+    {
+        "id": "ac15a8756f16e8de",
+        "type": "function",
+        "z": "ae39918233d5276a",
+        "name": "Invalid User",
+        "func": "msg.payload = \"Invalid username!\"\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 710,
+        "y": 80,
+        "wires": [
+            [
+                "423464d2d769a741"
+            ]
+        ]
+    },
+    {
+        "id": "59199d09a0ae0c14",
+        "type": "function",
+        "z": "ae39918233d5276a",
+        "name": "Invalid Password",
+        "func": "msg.payload = \"Invalid Password!\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 730,
+        "y": 120,
+        "wires": [
+            [
+                "423464d2d769a741"
+            ]
+        ]
+    },
+    {
+        "id": "423464d2d769a741",
+        "type": "ui_toast",
+        "z": "ae39918233d5276a",
+        "position": "dialog",
+        "displayTime": "3",
+        "highlight": "",
+        "sendall": true,
+        "outputs": 1,
+        "ok": "OK",
+        "cancel": "",
+        "raw": false,
+        "className": "",
+        "topic": "Authentication Failed",
+        "name": "Authentication Failure Dialog",
+        "x": 980,
+        "y": 100,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "b14c9897ef324114",
+        "type": "function",
+        "z": "ae39918233d5276a",
+        "name": "Back to sign in",
+        "func": "var msg = {};\nmsg.payload = { \n    \"group\": {\n        \"hide\" : [\"Dashboard_Sensordata\", \"Dashboard_signout\",\n                \"Dashboard_TemperatureDisplay\", \"Dashboard_BrightnessDisplay\",\"Dashboard_HumidityDisplay\"],\n        \"show\" : [\"Dashboard_signin\"],\n},\n    \"tab\": \"Dashboard\"\n};\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 280,
+        "y": 180,
+        "wires": [
+            [
+                "dee2c9d6d2de3f4d"
+            ]
+        ]
+    },
+    {
+        "id": "dee2c9d6d2de3f4d",
+        "type": "ui_ui_control",
+        "z": "ae39918233d5276a",
+        "name": "Loging out",
+        "x": 490,
+        "y": 180,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "02d6f2ca223687b5",
+        "type": "ui_toast",
+        "z": "ae39918233d5276a",
+        "position": "top right",
+        "displayTime": "5",
+        "highlight": "red",
+        "sendall": true,
+        "outputs": 0,
+        "ok": "OK",
+        "cancel": "Cancel",
+        "raw": false,
+        "className": "",
+        "topic": "",
+        "name": "",
+        "x": 740,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "9b75f01f421bfc53",
+        "type": "mqtt in",
+        "z": "ae39918233d5276a",
+        "name": "",
+        "topic": "Group5/MTCDTL",
+        "qos": "0",
+        "datatype": "auto",
+        "broker": "78b53e31.6d293",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 80,
+        "y": 500,
+        "wires": [
+            [
+                "a683495fbdf45ffc",
+                "37fdbcf9de636ba5",
+                "b3f0674510f2ae0c",
+                "24c64d6ff874c766",
+                "4b6a211c3292360e",
+                "b64c2a2d8a31c2e8"
+            ]
+        ]
+    },
+    {
+        "id": "b64c2a2d8a31c2e8",
+        "type": "function",
+        "z": "ae39918233d5276a",
+        "name": "Tưới tự động trên website",
+        "func": "var p = msg.payload;\nconst myArr = p.split(\" \");\n\n    if(parseFloat(myArr[0]) <= 25&& parseFloat(myArr[1]) < 30&&parseFloat(myArr[2]<50))\n    {\n        msg.payload = \"Hệ thống đang tưới nước\";\n    }\n    else\n    {\n        msg.payload = \"Hệ thống đang tắt\";\n    }\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 430,
+        "y": 360,
+        "wires": [
+            [
+                "02d6f2ca223687b5"
+            ]
+        ]
+    },
+    {
+        "id": "a683495fbdf45ffc",
+        "type": "function",
+        "z": "ae39918233d5276a",
+        "name": "get Temp",
+        "func": "var p = msg.payload;\nconst myArr = p.split(\" \");\nmsg.payload = parseFloat(myArr[0]);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 380,
+        "y": 480,
+        "wires": [
+            [
+                "d4fa65b00c06cc5b",
+                "56fd8d4cafd86d79",
+                "a5ed8998aa2299d9",
+                "7c313e75b41c86c7"
+            ]
+        ]
+    },
+    {
+        "id": "d4fa65b00c06cc5b",
+        "type": "ui_gauge",
+        "z": "ae39918233d5276a",
+        "name": "",
+        "group": "0903db03f2c7488c",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Temperature",
+        "label": "°C",
+        "format": "{{value}}",
+        "min": "0",
+        "max": "50",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "className": "",
+        "x": 670,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "37fdbcf9de636ba5",
+        "type": "function",
+        "z": "ae39918233d5276a",
+        "name": "get Humidity",
+        "func": "var p = msg.payload;\nconst myArr = p.split(\" \");\nmsg.payload = parseFloat(myArr[1]);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 390,
+        "y": 640,
+        "wires": [
+            [
+                "6f3c3e8c0823204c",
+                "01d0e0ae016fa4ce",
+                "79b02dc464d3e9aa",
+                "70268ac256fb7909"
+            ]
+        ]
+    },
+    {
+        "id": "6f3c3e8c0823204c",
+        "type": "ui_gauge",
+        "z": "ae39918233d5276a",
+        "name": "",
+        "group": "d2cc15e96dc799eb",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Humidity",
+        "label": "%",
+        "format": "{{value}}",
+        "min": "0",
+        "max": "100",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "className": "",
+        "x": 660,
+        "y": 660,
+        "wires": []
+    },
+    {
+        "id": "e90a405538d16be9",
+        "type": "ui_toast",
+        "z": "ae39918233d5276a",
+        "position": "dialog",
+        "displayTime": "3",
+        "highlight": "",
+        "sendall": true,
+        "outputs": 1,
+        "ok": "OK",
+        "cancel": "",
+        "raw": false,
+        "className": "",
+        "topic": "",
+        "name": "",
+        "x": 1070,
+        "y": 580,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "70268ac256fb7909",
+        "type": "switch",
+        "z": "ae39918233d5276a",
+        "name": "",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "lte",
+                "v": "30",
+                "vt": "num"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 650,
+        "y": 580,
+        "wires": [
+            [
+                "8898a8fcfa5cf312",
+                "87972c04c430087d"
+            ]
+        ]
+    },
+    {
+        "id": "56fd8d4cafd86d79",
+        "type": "http request",
+        "z": "ae39918233d5276a",
+        "name": "",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "https://api.thingspeak.com/update?api_key=14CEZ9IT2APJCSCI&field1={{payload}}",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "authType": "",
+        "senderr": false,
+        "x": 670,
+        "y": 520,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "a5ed8998aa2299d9",
+        "type": "ui_chart",
+        "z": "ae39918233d5276a",
+        "name": "",
+        "group": "0903db03f2c7488c",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "label": "chart",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "50",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 650,
+        "y": 440,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "01d0e0ae016fa4ce",
+        "type": "ui_chart",
+        "z": "ae39918233d5276a",
+        "name": "",
+        "group": "d2cc15e96dc799eb",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "label": "chart",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "100",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 650,
+        "y": 620,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "79b02dc464d3e9aa",
+        "type": "http request",
+        "z": "ae39918233d5276a",
+        "name": "",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "https://api.thingspeak.com/update?api_key=14CEZ9IT2APJCSCI&field2={{payload}}",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "authType": "",
+        "senderr": false,
+        "x": 670,
+        "y": 700,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "47e9dd7795b8ad7a",
+        "type": "ui_chart",
+        "z": "ae39918233d5276a",
+        "name": "",
+        "group": "e0e818a47812b692",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "label": "chart",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "100",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 650,
+        "y": 820,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "7add994ce7c00d71",
+        "type": "ui_gauge",
+        "z": "ae39918233d5276a",
+        "name": "",
+        "group": "e0e818a47812b692",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Brightness",
+        "label": "lux",
+        "format": "{{value}}",
+        "min": "0",
+        "max": "1000",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "className": "",
+        "x": 670,
+        "y": 760,
+        "wires": []
+    },
+    {
+        "id": "b3f0674510f2ae0c",
+        "type": "function",
+        "z": "ae39918233d5276a",
+        "name": "get Brightness",
+        "func": "var p = msg.payload;\nconst myArr = p.split(\" \");\nmsg.payload = parseFloat(myArr[2]);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 400,
+        "y": 740,
+        "wires": [
+            [
+                "7add994ce7c00d71",
+                "47e9dd7795b8ad7a"
+            ]
+        ]
+    },
+    {
+        "id": "24c64d6ff874c766",
+        "type": "ui_button",
+        "z": "ae39918233d5276a",
+        "name": "",
+        "group": "1c73c43f.d461fc",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "label": "Tưới bằng website",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "payload": "Hệ thống đang tưới nước",
+        "payloadType": "str",
+        "topic": "topic",
+        "topicType": "msg",
+        "x": 410,
+        "y": 260,
+        "wires": [
+            [
+                "02d6f2ca223687b5"
+            ]
+        ]
+    },
+    {
+        "id": "4b6a211c3292360e",
+        "type": "ui_button",
+        "z": "ae39918233d5276a",
+        "name": "",
+        "group": "1c73c43f.d461fc",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "label": "Tắt bằng Website",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "payload": "Hệ thống đã tắt",
+        "payloadType": "str",
+        "topic": "topic",
+        "topicType": "msg",
+        "x": 410,
+        "y": 300,
+        "wires": [
+            [
+                "02d6f2ca223687b5"
+            ]
+        ]
+    },
+    {
+        "id": "65a2340161a2da2e",
+        "type": "ui_button",
+        "z": "ae39918233d5276a",
+        "name": "",
+        "group": "1d65ee78.404c62",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "label": "Sign out",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "payload": "",
+        "payloadType": "str",
+        "topic": "topic",
+        "topicType": "msg",
+        "x": 100,
+        "y": 180,
+        "wires": [
+            [
+                "b14c9897ef324114"
+            ]
+        ]
+    },
+    {
+        "id": "6910b85648139caa",
+        "type": "ui_ui_control",
+        "z": "ae39918233d5276a",
+        "name": "Đi đến mục sensor data",
+        "events": "all",
+        "x": 960,
+        "y": 40,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "8898a8fcfa5cf312",
+        "type": "http request",
+        "z": "ae39918233d5276a",
+        "name": "",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "https://maker.ifttt.com/trigger/pushnotificationHumid/with/key/jq52ioI6U97OgE5ZrleU4zQJzGx5IfyvfzxuFGcXhKb?&value1={{payload}}",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "authType": "",
+        "senderr": false,
+        "x": 870,
+        "y": 620,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "87972c04c430087d",
+        "type": "function",
+        "z": "ae39918233d5276a",
+        "name": "",
+        "func": "msg.payload=\"Độ ẩm quá thấp, bạn nên bật hệ thống để tưới nước! \"\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 860,
+        "y": 580,
+        "wires": [
+            [
+                "e90a405538d16be9"
+            ]
+        ]
+    },
+    {
+        "id": "7c313e75b41c86c7",
+        "type": "switch",
+        "z": "ae39918233d5276a",
+        "name": "",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "gte",
+                "v": "30",
+                "vt": "num"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 650,
+        "y": 400,
+        "wires": [
+            [
+                "720017064abb2b3e",
+                "c50247a904a75e86"
+            ]
+        ]
+    },
+    {
+        "id": "720017064abb2b3e",
+        "type": "function",
+        "z": "ae39918233d5276a",
+        "name": "",
+        "func": "msg.payload=\"Nhiệt độ rất cao, bạn nên tắt hệ thống! \"\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 840,
+        "y": 400,
+        "wires": [
+            [
+                "89ebf1be337a1ebc"
+            ]
+        ]
+    },
+    {
+        "id": "c50247a904a75e86",
+        "type": "http request",
+        "z": "ae39918233d5276a",
+        "name": "",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "https://maker.ifttt.com/trigger/pushnotificationTemp/with/key/jq52ioI6U97OgE5ZrleU4zQJzGx5IfyvfzxuFGcXhKb?&value1={{payload}}",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "authType": "",
+        "senderr": false,
+        "x": 870,
+        "y": 460,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "89ebf1be337a1ebc",
+        "type": "ui_toast",
+        "z": "ae39918233d5276a",
+        "position": "dialog",
+        "displayTime": "3",
+        "highlight": "",
+        "sendall": true,
+        "outputs": 1,
+        "ok": "OK",
+        "cancel": "Cancle",
+        "raw": false,
+        "className": "",
+        "topic": "msg.payload",
+        "name": "",
+        "x": 1050,
+        "y": 400,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "9e0d1cd7e04a8f18",
+        "type": "mqtt in",
+        "z": "ae39918233d5276a",
+        "name": "",
+        "topic": "Group5/Device",
+        "qos": "2",
+        "datatype": "auto",
+        "broker": "79204ce0a011ea3e",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 140,
+        "y": 900,
+        "wires": [
+            [
+                "11ce25451f7750c2"
+            ]
+        ]
+    },
+    {
+        "id": "11ce25451f7750c2",
+        "type": "function",
+        "z": "ae39918233d5276a",
+        "name": "",
+        "func": "if(msg.payload==1){\n    msg.payload=\"Smartphone đang bật hệ thống tưới nước.\"\n}\nelse{\n    msg.payload=\"Smartphone đang tắt hệ thống tưới nước.\"\n}\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 360,
+        "y": 900,
+        "wires": [
+            [
+                "5d9e076924203a0c"
+            ]
+        ]
+    },
+    {
+        "id": "5d9e076924203a0c",
+        "type": "ui_toast",
+        "z": "ae39918233d5276a",
+        "position": "top right",
+        "displayTime": "3",
+        "highlight": "",
+        "sendall": true,
+        "outputs": 0,
+        "ok": "OK",
+        "cancel": "",
+        "raw": false,
+        "className": "",
+        "topic": "",
+        "name": "",
+        "x": 640,
+        "y": 900,
+        "wires": []
+    },
+    {
+        "id": "8b6adec8161b8112",
+        "type": "ui_group",
+        "name": "signin",
+        "tab": "1fce68e670beab99",
+        "order": 1,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "78b53e31.6d293",
+        "type": "mqtt-broker",
+        "name": "broker.mqtt-dashboard.com:1883",
+        "broker": "broker.mqtt-dashboard.com:1883",
+        "port": "1883",
+        "clientid": "",
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "sessionExpiry": ""
+    },
+    {
+        "id": "0903db03f2c7488c",
+        "type": "ui_group",
+        "name": "TemperatureDisplay",
+        "tab": "1fce68e670beab99",
+        "order": 6,
+        "disp": true,
+        "width": 4,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "d2cc15e96dc799eb",
+        "type": "ui_group",
+        "name": "HumidityDisplay",
+        "tab": "1fce68e670beab99",
+        "order": 4,
+        "disp": true,
+        "width": 4,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "e0e818a47812b692",
+        "type": "ui_group",
+        "name": "BrightnessDisplay",
+        "tab": "1fce68e670beab99",
+        "order": 5,
+        "disp": true,
+        "width": 4,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "1c73c43f.d461fc",
+        "type": "ui_group",
+        "name": "Sensordata",
+        "tab": "1fce68e670beab99",
+        "order": 3,
+        "disp": true,
+        "width": 4,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "1d65ee78.404c62",
+        "type": "ui_group",
+        "name": "signout",
+        "tab": "1fce68e670beab99",
+        "order": 2,
+        "disp": true,
+        "width": 4,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "79204ce0a011ea3e",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "broker.mqtt-dashboard.com",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "sessionExpiry": ""
+    },
+    {
+        "id": "1fce68e670beab99",
+        "type": "ui_tab",
+        "z": "ae39918233d5276a",
+        "name": "Dashboard",
+        "icon": "dashboard",
+        "order": 1,
+        "disabled": false,
+        "hidden": false
+    }
+]

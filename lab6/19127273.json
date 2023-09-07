@@ -1,0 +1,21 @@
+[
+    {
+        "id": "f86ce639ccb17d7d",
+        "type": "function",
+        "z": "23308d23d136a115",
+        "name": "Push event log to array",
+        "func": "var dashboardLog=flow.get('dashboardLog')||[];\ndashboardLog.push(msg);\nif(dashboardLog.length>20){\n    dashboardLog.shift();\n    dashboardLog.length=20;\n}\nflow.set('dashboardLog',dashboardLog);\nmsg={}\nmsg.payload=dashboardLog;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 510,
+        "y": 220,
+        "wires": [
+            [
+                "9aff065c74a31125"
+            ]
+        ]
+    }
+]
